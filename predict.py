@@ -9,7 +9,7 @@ wget https://openaipublic.azureedge.net/main/whisper/models/e4b87e7e0bf463eb8e69
 
 import io
 import os
-from typing import Optional
+from typing import Optional, Any
 import torch
 from cog import BasePredictor, Input, Path, BaseModel
 
@@ -22,6 +22,7 @@ from whisper.utils import format_timestamp
 class ModelOutput(BaseModel):
     detected_language: str
     transcription: str
+    segments: Any
     translation: Optional[str]
     txt_file: Optional[Path]
     srt_file: Optional[Path]
@@ -80,6 +81,7 @@ class Predictor(BasePredictor):
             detected_language=LANGUAGES[result["language"]],
             transcription=transcription,
             translation=translation["text"] if translate else None,
+            segments=result["segments"],
         )
 
 
